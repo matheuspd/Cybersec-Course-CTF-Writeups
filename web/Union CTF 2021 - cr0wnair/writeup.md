@@ -169,5 +169,5 @@ headers = {"Authorization": f"Bearer {jwt_hs_token}"}
 res = requests.post(f"{URL_BASE}/upgrades/flag", headers=headers).json()
 print("\nResposta do servidor:")
 print(res)
-# FLAG{flag_teste}
+# union{I_<3_JS0N_4nD_th1ngs_wr4pp3d_in_JS0N}
 ```
