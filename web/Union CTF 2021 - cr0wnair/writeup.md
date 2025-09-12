@@ -19,6 +19,13 @@ Com isso, percebe-se que uma manipulação no token de acesso já nos daria aces
 
 Observando as dependências da aplicação, vemos uma versão vulnerável da biblioteca de verificação JPV (JSON Pattern Validator) e também uma versão de jwt-simple desatualizada. Explorando as vulnerbilidades é possível forjar um JWT, alterando o status do passageiro para "gold" e permitindo o acesso à flag.
 
+OBS: ao reproduzir o desafio localmente, é necessário criar chaves RSA pública e privada para colocar no arquivo config.js (já que no original elas vinham censuradas devido ao objetivo do desafio). Utilize as funções abaixo para recriá-las e copie seus valores para o arquivo de configuração:
+
+```
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout -out public.pem
+```
+
 ## Vulnerabilidade JPV 2.0.1
 
 A biblioteca jpv tem como intuito validar inputs de usuário comparando com patterns definidos a priore.
