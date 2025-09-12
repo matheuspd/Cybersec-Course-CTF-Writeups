@@ -26,6 +26,12 @@ openssl genrsa -out private.pem 2048
 openssl rsa -in private.pem -pubout -out public.pem
 ```
 
+Para o exploit também é necessário instalar as seguintes bibliotecas:
+
+```
+pip install requests pycryptodome gmpy2
+```
+
 ## Vulnerabilidade JPV 2.0.1
 
 A biblioteca jpv tem como intuito validar inputs de usuário comparando com patterns definidos a priore.
