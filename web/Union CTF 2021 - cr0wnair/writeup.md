@@ -106,10 +106,10 @@ Assim, se soubermos a chave pública (ou a reconstruirmos), podemos criar um JWT
 Continuando, com dois tokens vazados temos recursos para calcular a chave pública a partir da assinatura dos tokens. O algoritmo RS256, após realizar algumas operações de hashing sobre os headers e payload do token em base64 e fazer o padding utilizando o algoritmo PKCS#1 v1.5 (iremos chamar o valor resultante de "pt"), realiza a clássica operação RSA com a assinatura:
 
 ```
-sig = pt^d mod n  // d = expoente privado
+sig == pt^d (mod n)  // d = expoente privado
 ```
 
-A verificação é feita com ```sig^e mod n == pt (mod n)```.
+A verificação é feita com ```sig^e == pt (mod n)```.
 
 Para encontrar o valor do módulo n e recuperar a chave pública original, usamos uma função auxiliar get_magic() com valores de "e" arbitrários (nesse caso testamos apenas os valores mais comuns e encontramos que foi utilizado o clássico valor 65537):
 
