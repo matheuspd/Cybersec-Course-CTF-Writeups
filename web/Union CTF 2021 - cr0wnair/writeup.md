@@ -45,7 +45,17 @@ const pattern = {
 ```
 
 Porém, na linha 42 de checkin.js existe a verificação ```data["extras"][e]["sssr"] == "FQTU"```
-que caso seja verdadeira vaza um token JWT.
+que caso seja verdadeira vaza um token JWT:
+
+```js
+...
+    for(e in data["extras"]) {
+        if (data["extras"][e]["sssr"] && data["extras"][e]["sssr"] === "FQTU") {
+          var token = createToken(data["passport"], data["ffp"]);
+          var response = {msg: "You have successfully checked in. Thank you for being a Cr0wnAir frequent flyer. Your loyalty has been rewarded and you have been marked for an upgrade, please visit the upgrades portal.", "token": token};
+        }
+...
+```
 
 Para satisfazer essa verificação e bypassar a validação do jpv, exploramos a vulnerabilidade definida em: https://github.com/manvel-khnkoyan/jpv/issues/6.
 
