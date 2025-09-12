@@ -1,5 +1,7 @@
 let config = {};
 
+// These keys are generic ones that are not given at the original challenge.
+
 config.pubkey = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAppWt7Bupn8SEr4YId3FR
 q1ml93pTdFjPcAeIfRzivtOs0e/0zImCwQ04b6YooUz2fpLjo82sfh3UBrYS/row
@@ -39,6 +41,6 @@ kkLzEUohPMgxh2yQ3THgdzjK+nJsSTgfSIHOD+Gj2JGhQBcKjY8duf4XLuCIGkh7
 w6kNgtVdZ26nGL8ZQ1R31961gQ==
 -----END PRIVATE KEY-----`;
 
-config.flag = "FLAG{flag_teste}";
+config.flag = "union{I_<3_JS0N_4nD_th1ngs_wr4pp3d_in_JS0N}";
 
 module.exports = config;
