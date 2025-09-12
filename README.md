@@ -2,6 +2,13 @@
 
 Writeups of CTF Challenges given at Cybersec Course.
 
+## Autores
+
+* Matheus Pereira Dias
+* Augusto César Graeml
+* Gabriel de Souza Rossetto
+* Ricardo Rodrigues Affonso
+
 ## Crypto
 
 HITCON 2025 - Pedantic
