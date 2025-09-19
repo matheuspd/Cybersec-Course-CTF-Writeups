@@ -115,7 +115,8 @@ Um LCG é um gerador de números pseudoaleatórios da forma
 
 $$s_{n+1} = (a s_n + b) \ mod \ q$$
 
-Ele é determinístico e linear. Se conhecemos a e b, conseguimos prever toda a sequência. Mais ainda: existe um ponto fixo c satisfazendo  
+Ele é determinístico e linear. Se conhecemos a e b, conseguimos prever toda a sequência. Mais ainda: existe um ponto fixo c satisfazendo
+
 $$c = a c + b \ (mod \ q)$$
 
 ou seja
@@ -146,7 +147,9 @@ No `server.py`, `hash_points_to_scalars` recebe pontos controláveis (os comprom
 
 ### Recuperando a chave pública Y
 O servidor não mostra Y diretamente, mas fornece 10 rodadas da prova. Sabendo que:
+
 $$Gz_i = R_i + Yc_i => Y=(Gz_i-R_i)c_i^{-1} \ mod \ q$$
+
 podemos recomputar $c_i$ e achar Y.
 
 No `exploit.py`:
