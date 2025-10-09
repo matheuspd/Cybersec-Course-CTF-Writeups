@@ -1,6 +1,6 @@
 
 Disas da main:
-![[./images/main.png]]
+![dissasembly da função main](./images/main.png)
 
 Escreve o nome "*a\nb\tc*" no rdi -> posteriormente usado como parâmetro da função fopen
 
