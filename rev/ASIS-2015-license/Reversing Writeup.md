@@ -18,12 +18,12 @@ e não:
 ```
 key file not found!
 ```
-![[Pasted image 20251009175257.png]]
+![codigo equacao](./images/equacao_codigo.png)
 
 
-![[Pasted image 20251009175211.png]]
+![wolfram alpha](./images/num_caracteres.png)
 
-![[Pasted image 20251009181257.png]]
+![numero de linhas](./images/num_linhas.png)
 
 descobrimos assim que o número de caracteres em cada uma das linhas deve ser 6
 
