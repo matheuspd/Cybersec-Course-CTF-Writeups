@@ -4,18 +4,17 @@ import claripy
 def main():
     p = angr.Project("license", load_options={'auto_load_libs': False})
 
-    # Create a blank state
+    # Cria um estado em branco
     state = p.factory.blank_state()
 
-    # Build the file whose name is weird
+    # BCria o arquivo de licensa com o nome original
     license_name = "_a\nb\tc_"
 
-    # This is the license file
-    # From analyzing the binary, we know that the license file should have five 
-    # lines in total, and each line has 6 characters. Not setting file content 
-    # may also work, but in that case, angr will produce many more paths, and we 
-    # will spent much more time in path trimming.
-
+    # Esse é o arquivo de licença
+    # Analisando o binário, descobrimos que o arquivo deve conter 5 linhas
+    # no total e cada linha deve conter 6 chars. Sem essas informações, o angr 
+    # poderia funcionar, mas criaria muitos mais caminhos e demoraria bem mais tempo.
+    
     bytestring = None
     for i in range(5):
         line = [ ]
@@ -38,21 +37,21 @@ def main():
                        0x400ebf, 0x400a59)
             )
 
-    # One path will be found
+    # Um caminho será achado
     found = simgr.found[0]
     rsp = found.regs.rsp
-    flag_addr = rsp + 0x278 - 0xd8 # Ripped from IDA
-    # Perform an inline call to strlen() in order to determine the length of the 
-    # flag
+    flag_addr = rsp + 0x278 - 0xd8 # Valores retirados do IDA
+    # Simulamos uma chamado inline para a função strlen para encontrar o tamanho
+    # da flag
     FAKE_ADDR = 0x100000
     strlen = lambda state, arguments: \
         angr.SIM_PROCEDURES['libc']['strlen'](p, FAKE_ADDR).execute(
             state, arguments=arguments
         )
     flag_length = strlen(found, arguments=[flag_addr]).ret_expr
-    # In case it's not null-terminated, we get the least number as the length
+    # No caso de o arquivo não terminar em NULL, recebemos o menor tamanho possível
     flag_length_int = min(found.solver.eval_upto(flag_length, 3))
-    # Read out the flag!
+    # Encontrando a flag!
     flag_int = found.solver.eval(found.memory.load(flag_addr, flag_length_int))
     flag = bytes.fromhex(hex(flag_int)[2:])
     return flag
