@@ -7,7 +7,7 @@ def main():
     # Cria um estado em branco
     state = p.factory.blank_state()
 
-    # BCria o arquivo de licensa com o nome original
+    # Cria o arquivo de licensa com o nome original
     license_name = "_a\nb\tc_"
 
     # Esse é o arquivo de licença
