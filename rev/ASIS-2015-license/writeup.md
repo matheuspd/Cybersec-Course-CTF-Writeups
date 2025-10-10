@@ -63,7 +63,7 @@ DDDDDD\n
 EEEEEE
 ```
 
-A variável vetor_de_linhas (chamada de line_0, line_1, etc. nas próximas imagens em outro software) guarda o ponteiro para cada uma das linhas a partir da segunda (line_0 se refere à segunda linha, ... e line_3 à quinta linha):
+A variável vetor_de_linhas guarda o ponteiro para cada uma das linhas a partir da segunda (line_1 até line_4 nas próximas imagens, line_0 vem do começo da própria string):
 
 ![disas main](./images/vetor_linha.png)
 
