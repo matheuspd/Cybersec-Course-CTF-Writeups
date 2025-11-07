@@ -1,0 +1,3 @@
+# Run after `docker compose up -d`
+docker cp pwn-secret-notes-1:/lib/libc.so.6 .
+docker cp pwn-secret-notes-1:/lib64/ld-linux-x86-64.so.2 .
