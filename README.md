@@ -34,3 +34,7 @@ HITCON CTF 2025 - Secret notes
 https://github.com/hitconctf/ctf2025.hitcon.org/releases/download/v1.0.0/secret-notes-7f375dc1638758d96acd7d2e34498496f6cd5783.tar.gz
 
 ## Hardware
+
+Google CTF 2019 - flagrom
+
+https://github.com/google/google-ctf/tree/main/2019/quals/hardware-flagrom
