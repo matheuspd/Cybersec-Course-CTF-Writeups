@@ -28,6 +28,8 @@ Mudanças:
 - Foi necessário adicionar o arquivo flag.txt
 - Foram necessárias alterações no exploit, como a remoção de "\n" no ``recv`` do python e a alteração de constantes definidas de forma inválida nos arquivos de payload em c por defines.
 
+#### OBS: socat no Dockerfile não funcionou, provavelmente por conta da bufferização, porém o exploit roda dentro do Docker manualmente. Para isso, mapeie a pasta com `flagrom`, `firmware.8051`, `flag.txt`, `exploit.c`, `exploit.py` e `Makefile` para dentro do container e execute o `exploit.py` localmente dentro dele (coloque o binário `exploit.8051` já compilado para facilitar e retire o make do `exploit.py`), aí irá funcionar.
+
 ## 2. Arquitetura geral do ambiente
 
 ### 2.1 O microcontrolador Intel 8051
