@@ -18,6 +18,16 @@ O desafio simula um firmware legítimo que:
 A expectativa é que, com o banco “seguro”, a leitura não seja possível.
 Mas uma falha na implementação do hardware permite leitura fora de escopo, contornando totalmente a proteção.
 
+### 1.1 Mudanças nos arquivos do ctf
+
+Algumas mudanças foram necessárias para a execução do desafio funcionar, até por que já é um desafio de 6 anos atrás.
+
+Mudanças:
+- Foi necessário inserir repositórios descontinuados do ubuntu no Dockerfile para que as bibliotecas da versão 19.04 fossem baixadas.
+- Além disso, a linha ``CMD socat TCP-LISTEN:1337,reuseaddr,fork EXEC:"/home/user/flagrom",pty,stderr`` foi inserida para que o servidor iniciasse esperando uma conexão, além de comandos para baixar os pacotes do socat e do python2.
+- Foi necessário adicionar o arquivo flag.txt
+- Foram necessárias alterações no exploit, como a remoção de "\n" no ``recv`` do python e a alteração de constantes definidas de forma inválida nos arquivos de payload em c por defines.
+
 ## 2. Arquitetura geral do ambiente
 
 ### 2.1 O microcontrolador Intel 8051
